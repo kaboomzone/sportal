@@ -69,9 +69,10 @@ app.get('/home', (req, res) => {
                 return;
             }
             let lastname = row.LASTNAME;
+            res.render('home', { lastname });
         });
         
-        res.render('home', { lastname });
+        
     });
 });
 
