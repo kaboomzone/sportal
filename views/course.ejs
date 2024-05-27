@@ -92,8 +92,6 @@
 .table-shadow th, .table-shadow td {
     color: #ffffff;
 }
-
-
     </style>
 </head>
 <body>
@@ -115,36 +113,61 @@
         </div>
       </nav>
       
-
-      <div class="container">
-        <div class="card-container">
-            <div class="card" style="text-align: center;">
-              <h1 class="welcome-text">Your Attendance</h1>
-              <p class="welcome-text" style="font-size: 70px;"><%= totalpercentage %></p>
+      <div class="card-container">
+        <div class="card">
+        <form id="marks-form" action="/course" method="POST">
+            <div class="form-group">
+                <label style="color: #fff;" for="semester">Choose Semester:</label>
+                <select id="semester" name="semester" class="form-control">
+                    <option value="">Select a semester</option>
+                    <option value="1">Semester 1</option>
+                    <option value="2">Semester 2</option>
+                    <option value="3">Semester 3</option>
+                    <option value="4">Semester 4</option>
+                    <option value="5">Semester 5</option>
+                    <option value="6">Semester 6</option>
+                    <option value="7">Semester 7</option>
+                    <option value="8">Semester 8</option>
+                </select>
             </div>
-          </div>
-          <div style="border-bottom: solid #fff 3px ; margin-left:100px; margin-right:100px; margin-top:30px; margin-bottom:30px;"></div>
-        <h1 style="color: #fff; text-align:center;">Subject Attendance</h1>
-        <table id="attendance-table" class="table table-bordered table-shadow">
-          <thead>
-            <tr>
-              <th>Subject</th>
-              <th>Percentage</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for (let sub of subs) { %>
-              <tr>
-                <td><%= sub.subject %></td>
-                <td><%= sub.percentage %></td>
-              </tr>
-            <% } %>
-          </tbody>
-          <tfoot>
-          </tfoot>
-        </table>
-      </div>
-
+            <div class="form-group">
+                <label style="color: #fff;" for="subject">Choose Subject:</label>
+                <select id="subject" name="subject" class="form-control">
+                    <option value="">Select Subject</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary text-center">Submit</button>
+        </form>
+        </div>
+    </div>
+    
+    <script>
+      const subjects = {
+        1: ['Mathematics 1', 'Physics 1', 'Chemistry 1'],
+        2: ['Mathematics 2', 'Physics 2', 'Chemistry 2'],
+        3: ['Mathematics 3', 'Physics 3', 'Chemistry 3'],
+        4: ['Mathematics 4', 'Physics 4', 'Chemistry 4'],
+        5: ['Mathematics 5', 'Physics 5', 'Chemistry 5'],
+        6: ['Mathematics 6', 'Physics 6', 'Chemistry 6'],
+        7: ['Mathematics 7', 'Physics 7', 'Chemistry 7'],
+        8: ['Mathematics 8', 'Physics 8', 'Chemistry 8']
+      };
       
+      document.getElementById('semester').addEventListener('change', function() {
+        const semester = this.value;
+        const subjectSelect = document.getElementById('subject');
+        
+        subjectSelect.innerHTML = '<option value="">Select a subject</option>';
+        
+        if (subjects[semester]) {
+          subjects[semester].forEach(subject => {
+            const option = document.createElement('option');
+            option.value = subject;
+            option.textContent = subject;
+            subjectSelect.appendChild(option);
+          });
+        }
+      });
+    </script>
 </body>
 </html>

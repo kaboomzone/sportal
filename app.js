@@ -36,129 +36,6 @@ function isAuthenticated(req, res, next) {
     }
 }
 
-app.get('/', (req, res) => {
-    res.render('login', { errorMessage: '' });
-});
-
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    const query = `SELECT * FROM user WHERE username = ?`;
-
-    db.get(query, [username], (err, row) => {
-        if (err) {
-            console.error('Error executing query:', err.message);
-            res.status(500).send('Internal Server Error');
-            return;
-        }
-
-        if (!row || row.PASSWORD !== password) {
-            res.render('login', { errorMessage: 'Invalid username or password' });
-            return;
-        }
-
-    
-        req.session.username = username;
-        res.redirect('/home');
-    });
-});
-
-app.get('/home', isAuthenticated, (req, res) => {
-    const query = `SELECT * FROM user WHERE username = ?`;
-    const username = req.session.username;
-    console.log(username);
-
-    db.get(query, [username], (err, row) => {
-        if (err) {
-            console.error('Error executing query:', err.message);
-            res.status(500).send('Internal Server Error');
-            return;
-        }
-        let lastname = row.LASTNAME;
-        res.render('home', { lastname });
-    });
-});
-
-app.get('/marks', isAuthenticated, async (req, res) => {
-    const username = req.session.username;
-    try {
-        const result = await getMarksBySemester(1, username);
-        res.render('marks', {
-            marks: result.marks,
-            sgpa: result.sgpa,
-            cgpa: result.cgpa
-        });
-    } catch (err) {
-        console.error('Error fetching marks:', err.message);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-const getMarksBySemester = (semester, username) => {
-    return new Promise((resolve, reject) => {
-        const query = `SELECT * FROM sem${semester} WHERE id = ?`;
-        db.get(query, [username], (err, row) => {
-            if (err) {
-                reject(err);
-            } else {
-                if (!row) {
-                    resolve({
-                        marks: [],
-                        sgpa : 0,
-                        cgpa: 0
-                    });
-                } else {
-                    const marks = [
-                        { subject: 'Subject1', marks: row.sub1 },
-                        { subject: 'Subject2', marks: row.sub2 },
-                        { subject: 'Subject3', marks: row.sub3 },
-                        { subject: 'Subject4', marks: row.sub4 },
-                        { subject: 'Subject5', marks: row.sub5 },
-                        { subject: 'Subject6', marks: row.sub6 }
-                    ];
-                    const totalMarks = marks.reduce((total, mark) => total + parseInt(mark.marks), 0);
-                    const sgpa = (totalMarks / marks.length);
-                    const cgpa = row.cgpa;
-                    resolve({
-                        marks,
-                        sgpa,
-                        cgpa
-                    });
-                }
-            }
-        });
-    });
-};
-
-app.post('/marks', isAuthenticated, async (req, res) => {
-    const semester = req.body.semester;
-    const username = req.session.username;
-    try {
-        const result = await getMarksBySemester(semester, username);
-        res.render('marks', {
-            marks: result.marks,
-            sgpa: result.sgpa,
-            cgpa: result.cgpa
-        });
-    } catch (err) {
-        console.error('Error fetching marks:', err.message);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-
-app.get('/attendance', isAuthenticated, async (req, res) => {
-    const username = req.session.username;
-    try {
-        const result = await getAttendance(username);
-        res.render('attendance', {
-            subs: result.attendance,
-            totalpercentage: result.totalpercentage
-        });
-    } catch (err) {
-        console.error('Error fetching marks:', err.message);
-        res.status(500).send('Internal Server Error');
-    }
-});
 
 const getAttendance = (username) => {
     return new Promise((resolve, reject) => {
@@ -229,6 +106,157 @@ const getFees = (val, val2, username) => {
 };
 
 
+const getMarksBySemester = (semester, username) => {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM sem${semester} WHERE id = ?`;
+        db.get(query, [username], (err, row) => {
+            if (err) {
+                reject(err);
+            } else {
+                if (!row) {
+                    resolve({
+                        marks: [],
+                        sgpa : 0,
+                        cgpa: 0
+                    });
+                } else {
+                    const marks = [
+                        { subject: 'Subject1', marks: row.sub1 },
+                        { subject: 'Subject2', marks: row.sub2 },
+                        { subject: 'Subject3', marks: row.sub3 },
+                        { subject: 'Subject4', marks: row.sub4 },
+                        { subject: 'Subject5', marks: row.sub5 },
+                        { subject: 'Subject6', marks: row.sub6 }
+                    ];
+                    const totalMarks = marks.reduce((total, mark) => total + parseInt(mark.marks), 0);
+                    const sgpa = (totalMarks / marks.length);
+                    const cgpa = row.cgpa;
+                    resolve({
+                        marks,
+                        sgpa,
+                        cgpa
+                    });
+                }
+            }
+        });
+    });
+};
+
+
+const getVideos = (semester,subject,username) => {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM course WHERE sem = ? and subject=?`;
+        db.all(query, [semester,subject], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                
+                const coursedetails = rows.map(row => ({
+                    name: row.name,
+                    link: row.link,
+                    subject: row.subject
+                }));
+                resolve({
+                    coursedetails
+                });
+            }
+        });
+    });
+};
+
+
+
+app.get('/', (req, res) => {
+    res.render('login', { errorMessage: '' });
+});
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    const query = `SELECT * FROM user WHERE username = ?`;
+
+    db.get(query, [username], (err, row) => {
+        if (err) {
+            console.error('Error executing query:', err.message);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (!row || row.PASSWORD !== password) {
+            res.render('login', { errorMessage: 'Invalid username or password' });
+            return;
+        }
+
+    
+        req.session.username = username;
+        res.redirect('/home');
+    });
+});
+
+app.get('/home', isAuthenticated, (req, res) => {
+    const query = `SELECT * FROM user WHERE username = ?`;
+    const username = req.session.username;
+    console.log(username);
+
+    db.get(query, [username], (err, row) => {
+        if (err) {
+            console.error('Error executing query:', err.message);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        let lastname = row.LASTNAME;
+        res.render('home', { lastname });
+    });
+});
+
+app.get('/marks', isAuthenticated, async (req, res) => {
+    const username = req.session.username;
+    try {
+        const result = await getMarksBySemester(1, username);
+        res.render('marks', {
+            marks: result.marks,
+            sgpa: result.sgpa,
+            cgpa: result.cgpa
+        });
+    } catch (err) {
+        console.error('Error fetching marks:', err.message);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+
+app.post('/marks', isAuthenticated, async (req, res) => {
+    const semester = req.body.semester;
+    const username = req.session.username;
+    try {
+        const result = await getMarksBySemester(semester, username);
+        res.render('marks', {
+            marks: result.marks,
+            sgpa: result.sgpa,
+            cgpa: result.cgpa
+        });
+    } catch (err) {
+        console.error('Error fetching marks:', err.message);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+app.get('/attendance', isAuthenticated, async (req, res) => {
+    const username = req.session.username;
+    try {
+        const result = await getAttendance(username);
+        res.render('attendance', {
+            subs: result.attendance,
+            totalpercentage: result.totalpercentage
+        });
+    } catch (err) {
+        console.error('Error fetching marks:', err.message);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
 app.get('/fees', isAuthenticated, async (req, res) => {
     const username = req.session.username;
     console.log(username);
@@ -252,8 +280,7 @@ app.post('/fees', isAuthenticated, async (req, res) => {
     const username = req.session.username;
     const errorMsg = "You have no records in "+ feetype[semester];
     try {
-        const result = await getFees(semester, year, username);
-        console.log(result.feesdetails.length);
+        const result = await getFees(semester, year, username)
         if (result.feesdetails.length === 0) {
             res.render('fees', {
                 feesdetails: result.feesdetails,
@@ -271,6 +298,43 @@ app.post('/fees', isAuthenticated, async (req, res) => {
     }
 });
 
+
+app.get('/course', (req, res) => {
+    res.render('course');
+});
+
+
+app.post('/course', isAuthenticated, async (req, res) => {
+    const { semester, subject } = req.body;
+    const username = req.session.username; 
+
+    try {
+        res.redirect(`/coursevideos?semester=${encodeURIComponent(semester)}&subject=${encodeURIComponent(subject)}`);
+    } catch (err) {
+        console.error('Error fetching courses:', err.message);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+app.get('/coursevideos', isAuthenticated, async (req, res) => {
+    const semester = req.query.semester;
+    const subject = req.query.subject;
+    const username = req.session.username;
+
+    try {
+        const result = await getVideos(semester, subject, username);
+        console.log(result.coursedetails);
+        res.render('coursevideos', {
+            coursevideos: result.coursedetails,
+            semester: semester,
+            subject: subject
+        });
+    } catch (err) {
+        console.error('Error fetching course videos:', err.message);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 
 
