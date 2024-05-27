@@ -82,6 +82,10 @@
         background-color: #0056b3;
       }
 
+      .disabled{
+        display: none;
+      }
+
 
       .table-shadow {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.514);
@@ -102,6 +106,7 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+        
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <a class="nav-link active" href="/home">Home <span class="sr-only">(current)</span></a>
@@ -117,58 +122,79 @@
       
 
       <div class="container">
-        <div class="card-container">
-            <div class="card" style="text-align: center;">
-              <h1 class="welcome-text">Your CGPA</h1>
-              <p class="welcome-text" style="font-size: 70px;"><%= cgpa %></p>
-            </div>
-          </div>
           <div style="border-bottom: solid #fff 3px ; margin-left:100px; margin-right:100px; margin-top:30px; margin-bottom:30px;"></div>
-        <h1 style="color: #fff; text-align:center;">Semester Marks</h1>
+        <h1 style="color: #fff; text-align:center;">Fees Details</h1>
         <div class="card-container">
             <div class="card">
-            <form id="marks-form" action="/marks" method="POST">
+            <form id="marks-form" action="/fees" method="POST">
                 <div class="form-group">
-                    <label style="color: #fff;" for="semester">Choose Semester:</label>
-                    <select id="semester" name="semester" class="form-control">
-                        <option value="1">Semester 1</option>
-                        <option value="2">Semester 2</option>
-                        <option value="3">Semester 3</option>
-                        <option value="4">Semester 4</option>
-                        <option value="5">Semester 5</option>
-                        <option value="6">Semester 6</option>
-                        <option value="7">Semester 7</option>
-                        <option value="8">Semester 8</option>
+                    <label style="color: #fff;" for="semester">Choose FeesType:</label>
+                    <select id="feestype" name="feestype" class="form-control">
+                        <option value="" selected disabled>Select Fees Type</option>
+                        <option value="0">Tution Fee</option>
+                        <option value="1">Hostel Fee</option>
+                        <option value="2">Transport Fee</option>
+
                     </select>
+                    <select class="disabled form-control" id="year" name="year" style="margin-top:20px;">
+                      <option value="" selected disabled>Select Year</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                  </select>
                 </div>
-                <button type="submit" class="btn btn-primary text-center">Submit</button>
+                <button type="submit" id="submitBtn" name="submitBtn" class="btn btn-primary text-center disabled">Submit</button>
             </form>
             </div>
-        </div>
+          </div>
+        <% if (feesdetails && feesdetails.length > 0) { %>
         <table id="marks-table" class="table table-bordered table-shadow">
           <thead>
             <tr>
-              <th>Subject</th>
-              <th>Marks</th>
+              <th>Year</th>
+              <th>FeePaid</th>
+              <th>FeeDue</th>
             </tr>
           </thead>
           <tbody>
-            <% for (let mark of marks) { %>
-              <tr>
-                <td><%= mark.subject %></td>
-                <td><%= mark.marks %></td>
-              </tr>
-            <% } %>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td>SGPA</td>
-              <td id="sgpa"><%= sgpa %></td>
-            </tr>
-          </tfoot>
-        </table>
+              <% for (let mark of feesdetails) { %>
+                  <tr>
+                      <td><%= mark.year %> Year</td>
+                      <td><%= mark.feespaid %></td>
+                      <td><%= mark.feesdue %></td>
+                  </tr>
+              <% } %>
+            </tbody>
+            <tfoot>
+            </tfoot>
+          </table>
+          <% } else { %>
+            <div class="card-container">
+              <div class="card">
+                <p class="welcome-text text-center"><%= errormsg %></p>
+              </div>
+            </div>
+          <% } %>
       </div>
+<script>
+  const dropdown2 = document.getElementById("year");
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const dropdown = document.getElementById("feestype");
+    const submitBtn = document.getElementById("submitBtn");
+    dropdown.addEventListener("change", function() {
+      dropdown2.classList.remove("disabled");
+    });
+  });
+    document.addEventListener('DOMContentLoaded', (event) => {
+    const submitBtn = document.getElementById("submitBtn");
+    dropdown2.addEventListener("change", function() {
+      submitBtn.classList.remove("disabled");
+    })
+  });
 
+
+</script>
       
 </body>
 </html>
