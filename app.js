@@ -174,16 +174,15 @@ const getProfile = (username) => {
                 const profile = {
                     name: row.name,
                     email: row.email,
-                    phone: row.phone,
-                    address: row.address,
+                    phone: row.number,
+                    branch: row.branch,
+                    section: row.section,
                     dob: row.dob,
                     gender: row.gender,
-                    username: row.username,
-                    
+                    username: row.id,
+                    link: row.link
                 }
-                resolve({
-                    profile
-                });
+                resolve(profile);
             }
         });
     });
@@ -374,14 +373,54 @@ app.get('/coursevideos', isAuthenticated, async (req, res) => {
 });
 
 
-app.get('/profile', (req, res) => {
+app.get('/profile', isAuthenticated, async (req, res) => {
     const username = req.session.username;
-
-    const result = getProfile(username);
-    console.log(result);
+    console.log(username);
+    if(username === undefined){
+        res.redirect('/');
+    }
+    const result = await getProfile(username);
     res.render('profile',{
-        profile: result
+        results: result,
+        message: ""
     });
+});
+
+app.post('/changepassword', isAuthenticated, async (req, res) => {
+    const username = req.session.username;
+    const currentPassword = req.body.currentPassword;
+    const newPassword = req.body.newPassword;
+    const confirmPassword = req.body.confirmPassword;
+
+    console.log(req.body);
+    if(username === undefined){
+        res.redirect('/');
+    }
+    const results = await getProfile(username);
+
+
+    try {
+        const query = `Select * from USER where USERNAME = ? and  PASSWORD = ?`;
+        const result = await db.get(query, [username, currentPassword]);
+        if (result.length == 0) {
+            console.log("hii")
+            res.render('profile', {
+                results: results,
+                message: 'Current password is incorrect'
+                });
+                } 
+        else {
+            const query = `UPDATE USER SET PASSWORD = ? WHERE USERNAME = ?`;
+            const result = await db.run(query, [newPassword, username]);
+            res.render('profile', {
+                results: results,
+                message: 'Password changed successfully'
+                });
+            }
+    } catch (err) {
+        console.error('Error fetching course videos:', err.message);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 app.get('/logout', (req, res) => {
