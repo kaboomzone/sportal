@@ -119,16 +119,11 @@
             <div class="form-group">
                 <label style="color: #fff;" for="semester">Choose Semester:</label>
                 <select id="semester" name="semester" class="form-control">
-                    <option value="">Select a semester</option>
-                    <option value="1">Semester 1</option>
-                    <option value="2">Semester 2</option>
-                    <option value="3">Semester 3</option>
-                    <option value="4">Semester 4</option>
-                    <option value="5">Semester 5</option>
-                    <option value="6">Semester 6</option>
-                    <option value="7">Semester 7</option>
-                    <option value="8">Semester 8</option>
-                </select>
+                  <option value="0">Select Semester</option>
+                  <% for(let i = 1; i <= 8; i++) { %>
+                      <option value="<%= i %>" <%= i === parseInt(currentsemester) ? 'selected' : '' %> >Semester <%= i %></option>
+                  <% } %>
+              </select>
             </div>
             <div class="form-group">
                 <label style="color: #fff;" for="subject">Choose Subject:</label>
@@ -139,20 +134,49 @@
             <button type="submit" class="btn btn-primary text-center">Submit</button>
         </form>
         </div>
+
     </div>
+    <% if(coursevideos && coursevideos.length > 0) { %>
+      <div class="card-container">
+        <div class="card">
+          <div class="card-body">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/<%= coursevideos[0].link %>?rel=0" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
     
+    <% } %>
     <script>
       const subjects = {
-        1: ['Mathematics 1', 'Physics 1', 'Chemistry 1'],
-        2: ['Mathematics 2', 'Physics 2', 'Chemistry 2'],
-        3: ['Mathematics 3', 'Physics 3', 'Chemistry 3'],
-        4: ['Mathematics 4', 'Physics 4', 'Chemistry 4'],
-        5: ['Mathematics 5', 'Physics 5', 'Chemistry 5'],
-        6: ['Mathematics 6', 'Physics 6', 'Chemistry 6'],
-        7: ['Mathematics 7', 'Physics 7', 'Chemistry 7'],
-        8: ['Mathematics 8', 'Physics 8', 'Chemistry 8']
+        1: ['FIT', 'C', 'M1','Bee',],
+        2: ['DLD', 'Ed', 'M2','Chem','Phy'],
+        3: ['Ds', 'Dms', 'Se','Comp','electrical eng'],
+        4: ['Os ', 'Psqt', 'Dc','Dbms','Java'],
+        5: ['Cn', 'Atcd', 'Dwdm','Ai'],
+        6: ['Ml', 'Daa', 'Sc','Dt','Oe'],
+        7: ['Dl', 'Nlp', 'crpto and ns','Ds'],
       };
-      
+
+      const semesterVal = document.getElementById("semester").value;
+      if(semesterVal !== "0"){
+        const semester = semesterVal;
+        const subjectSelect = document.getElementById('subject');
+        
+        subjectSelect.innerHTML = '<option value="">Select a subject</option>';
+        
+        if (subjects[semester]) {
+          subjects[semester].forEach(subject => {
+            const option = document.createElement('option');
+            option.value = subject;
+            option.textContent = subject;
+            subjectSelect.appendChild(option);
+          });
+        }
+
+      }
+
       document.getElementById('semester').addEventListener('change', function() {
         const semester = this.value;
         const subjectSelect = document.getElementById('subject');

@@ -164,6 +164,31 @@ const getVideos = (semester,subject,username) => {
     });
 };
 
+const getProfile = (username) => {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM profile WHERE id = ?`;
+        db.get(query, [username], (err, row) => {
+            if (err) {
+                reject(err);
+            } else {
+                const profile = {
+                    name: row.name,
+                    email: row.email,
+                    phone: row.phone,
+                    address: row.address,
+                    dob: row.dob,
+                    gender: row.gender,
+                    username: row.username,
+                    
+                }
+                resolve({
+                    profile
+                });
+            }
+        });
+    });
+};
+
 
 
 app.get('/', (req, res) => {
@@ -300,18 +325,31 @@ app.post('/fees', isAuthenticated, async (req, res) => {
 
 
 app.get('/course', (req, res) => {
-    res.render('course');
+    res.render('course',{
+        coursevideos: [],
+        currentsemester: 0,
+        subject: 0
+    });
 });
 
 
 app.post('/course', isAuthenticated, async (req, res) => {
-    const { semester, subject } = req.body;
-    const username = req.session.username; 
+    const semester = req.body.semester;
+    const subject = req.body.subject;
+    const username = req.session.username;
+
+    console.log(subject,semester);
 
     try {
-        res.redirect(`/coursevideos?semester=${encodeURIComponent(semester)}&subject=${encodeURIComponent(subject)}`);
+        const result = await getVideos(semester, subject, username);
+        console.log(result.coursedetails);
+        res.render('course', {
+            coursevideos: result.coursedetails,
+            currentsemester: semester,
+            subject: subject
+        });
     } catch (err) {
-        console.error('Error fetching courses:', err.message);
+        console.error('Error fetching course videos:', err.message);
         res.status(500).send('Internal Server Error');
     }
 });
@@ -324,7 +362,6 @@ app.get('/coursevideos', isAuthenticated, async (req, res) => {
 
     try {
         const result = await getVideos(semester, subject, username);
-        console.log(result.coursedetails);
         res.render('coursevideos', {
             coursevideos: result.coursedetails,
             semester: semester,
@@ -337,7 +374,15 @@ app.get('/coursevideos', isAuthenticated, async (req, res) => {
 });
 
 
+app.get('/profile', (req, res) => {
+    const username = req.session.username;
 
+    const result = getProfile(username);
+    console.log(result);
+    res.render('profile',{
+        profile: result
+    });
+});
 
 app.get('/logout', (req, res) => {
     req.session.destroy((err) => {
