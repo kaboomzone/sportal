@@ -2,11 +2,12 @@
   "name": "sportal",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo \"No build step required\"",
-    "start": "node app.js"
+    "start": "node app.js",
+    "postinstall": "npm rebuild sqlite3"
   },
   "keywords": [],
   "author": "",
