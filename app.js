@@ -129,7 +129,8 @@ const getMarksBySemester = (semester, username) => {
                         { subject: 'Subject6', marks: row.sub6 }
                     ];
                     const totalMarks = marks.reduce((total, mark) => total + parseInt(mark.marks), 0);
-                    const sgpa = (totalMarks / marks.length);
+                    let result = (totalMarks / marks.length);
+                    const sgpa = Math.round(result*10)/10;
                     const cgpa = row.cgpa;
                     resolve({
                         marks,
