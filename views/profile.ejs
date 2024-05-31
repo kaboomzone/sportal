@@ -63,6 +63,7 @@
       .navbar {
         background: linear-gradient(to right, #00719C, #00719C)!important;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        margin-bottom: 100px;
       }
       .card-container {
         display: flex;
@@ -220,7 +221,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light fixed-top">
       <button class="navbar-toggler border-0 shadow-none" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <i class="bi bi-list-nested"></i>
       </button>
@@ -241,9 +242,9 @@
           </div>
         </div>
       </nav>
-  <p style="color:#93c950; text-align:center;"><%= message %></p>
-  <div class="profile-pic-container">
-    <div class="profile-pic"></div>
+  <p style="color:#93c950; text-align:center; margin-top:20px;"><%= message %></p>
+  <div class="profile-pic-container" style="margin-top: 90px;">
+    <div class="profile-pic"></div> 
     </div>
     <div class="card-container">
     <div class="card">
