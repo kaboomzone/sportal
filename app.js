@@ -27,7 +27,6 @@ app.use(session({
 }));
 
 
-//Authentication
 function isAuthenticated(req, res, next) {
     if (req.session.username) {
         next();
@@ -73,8 +72,6 @@ const getAttendance = (username) => {
 
 const getFees = (val, val2, username) => {
     const feetype = ["tution", "hostel", "transport"];
-    console.log(feetype[val]);
-    console.log(username);
     return new Promise((resolve, reject) => {
         const query = `SELECT * FROM ${feetype[val]} WHERE id = ? and year = ?`;
         db.all(query, [username,val2], (err, rows) => {
@@ -220,8 +217,6 @@ app.post('/login', (req, res) => {
 app.get('/home', isAuthenticated, (req, res) => {
     const query = `SELECT * FROM user WHERE username = ?`;
     const username = req.session.username;
-    console.log(username);
-
     db.get(query, [username], (err, row) => {
         if (err) {
             console.error('Error executing query:', err.message);
@@ -284,7 +279,6 @@ app.get('/attendance', isAuthenticated, async (req, res) => {
 
 app.get('/fees', isAuthenticated, async (req, res) => {
     const username = req.session.username;
-    console.log(username);
     try {
         const result = {feesdetails:[]}
         console.log(result.feesdetails);
@@ -338,11 +332,9 @@ app.post('/course', isAuthenticated, async (req, res) => {
     const subject = req.body.subject;
     const username = req.session.username;
 
-    console.log(subject,semester);
 
     try {
         const result = await getVideos(semester, subject, username);
-        console.log(result.coursedetails);
         res.render('course', {
             coursevideos: result.coursedetails,
             currentsemester: semester,
@@ -376,7 +368,6 @@ app.get('/coursevideos', isAuthenticated, async (req, res) => {
 
 app.get('/profile', isAuthenticated, async (req, res) => {
     const username = req.session.username;
-    console.log(username);
     if(username === undefined){
         res.redirect('/');
     }
@@ -393,7 +384,6 @@ app.post('/changepassword', isAuthenticated, async (req, res) => {
     const newPassword = req.body.newPassword;
     const confirmPassword = req.body.confirmPassword;
 
-    console.log(req.body);
     if(username === undefined){
         res.redirect('/');
     }
@@ -404,7 +394,6 @@ app.post('/changepassword', isAuthenticated, async (req, res) => {
         const query = `Select * from USER where USERNAME = ? and  PASSWORD = ?`;
         const result = await db.get(query, [username, currentPassword]);
         if (result.length == 0) {
-            console.log("hii")
             res.render('profile', {
                 results: results,
                 message: 'Current password is incorrect'
