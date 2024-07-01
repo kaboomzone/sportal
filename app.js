@@ -3,7 +3,10 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 const session = require('express-session');
-
+const multer = require('multer');
+const csvParser = require('csv-parser');
+const xlsx = require('xlsx');
+const fs = require('fs');
 const app = express();
 const PORT = 3000;
 
@@ -192,6 +195,11 @@ app.get('/', (req, res) => {
     res.render('login', { errorMessage: '' });
 });
 
+app.get('/admin', (req, res) => {
+    res.render('admin/login', { errorMessage: '' });
+});
+
+
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     const query = `SELECT * FROM user WHERE username = ?`;
@@ -211,6 +219,43 @@ app.post('/login', (req, res) => {
     
         req.session.username = username;
         res.redirect('/home');
+    });
+});
+
+app.post('/adminlogin', (req, res)=>{
+    const { username, password } = req.body;
+    const query = `SELECT * FROM admin WHERE username = ?`;
+
+    db.get(query, [username], (err, row) => {
+        if (err) {
+            console.error('Error executing query:', err.message);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (!row || row.PASSWORD !== password) {
+            res.render('login', { errorMessage: 'Invalid username or password' });
+            return;
+        }
+
+    
+        req.session.username = username;
+        res.redirect('/adminhome');
+    });
+
+});
+
+app.get('/adminhome', isAuthenticated, (req, res) => {
+    const query = `SELECT * FROM admin WHERE username = ?`;
+    const username = req.session.username;
+    db.get(query, [username], (err, row) => {
+        if (err) {
+            console.error('Error executing query:', err.message);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        let lastname = row.LASTNAME;
+        res.render('admin/home', { lastname });
     });
 });
 
@@ -242,7 +287,6 @@ app.get('/marks', isAuthenticated, async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
 
 
 app.post('/marks', isAuthenticated, async (req, res) => {
@@ -281,7 +325,6 @@ app.get('/fees', isAuthenticated, async (req, res) => {
     const username = req.session.username;
     try {
         const result = {feesdetails:[]}
-        console.log(result.feesdetails);
         res.render('fees', {
             feesdetails: result.feesdetails,
             errormsg: "Enter Details"
@@ -427,3 +470,47 @@ app.get('/logout', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
+//admin
+
+app.get('/adminmarks', isAuthenticated, (req, res) => {
+    const query = `SELECT * FROM marks`;
+    db.all(query, [], (err, rows) => {
+        console.log(rows);
+        if (err) {
+            console.error(err.message);
+            res.send('Error retrieving student data');
+        } else {
+            res.render('admin/marks', { students: rows });
+        }
+    });
+});
+
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/upload-excel', upload.single('excelFile'), (req, res) => {
+    const filePath = req.file.path;
+  
+    const workbook = xlsx.readFile(filePath);
+    const sheetName = workbook.SheetNames[0]; // Assuming the first sheet is the relevant one
+    const worksheet = workbook.Sheets[sheetName];
+    const excelData = xlsx.utils.sheet_to_json(worksheet);
+  
+    excelData.forEach(row => {
+      const { id, sem, sub1, sub2, sub3, sub4, sub5, sub6, sgpa, cgpa } = row;
+      const sql = 'INSERT INTO marks (id, sem, sub1, sub2, sub3, sub4, sub5, sub6, sgpa, cgpa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      db.run(sql, [id, sem, sub1, sub2, sub3, sub4, sub5, sub6, sgpa, cgpa], function (err) {
+        if (err) {
+          console.error('Error inserting row', err);
+        } else {
+          console.log('Row inserted:', this.lastID); // SQLite provides lastID through 'this'
+        }
+      });
+    });
+  
+    // Delete the uploaded file
+    fs.unlinkSync(filePath);
+  
+    res.send('Excel file uploaded and data inserted into the database');
+  });

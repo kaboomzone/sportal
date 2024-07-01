@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sportal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <style>
+
+      @charset "UTF-8";
+      /*=============== GOOGLE FONTS ===============*/
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+      /*=============== VARIABLES CSS ===============*/
+      :root {
+        /*========== Colors ==========*/
+        /*Color mode HSL(hue, saturation, lightness)*/
+        --first-color: hsl(244, 75%, 57%);
+        --second-color: hsl(249, 64%, 47%);
+        --title-color: hsl(244, 12%, 12%);
+        --text-color: hsl(244, 4%, 36%);
+        --body-color: hsl(208, 97%, 85%);
+        /*========== Font and typography ==========*/
+        /*.5rem = 8px | 1rem = 16px ...*/
+        --body-font: "Poppins", sans-serif;
+        --h2-font-size: 1.25rem;
+        --small-font-size: .813rem;
+        --smaller-font-size: .75rem;
+        /*========== Font weight ==========*/
+        --font-medium: 500;
+        --font-semi-bold: 600;
+      }
+      @media screen and (min-width: 1024px) {
+        :root {
+          --h2-font-size: 1.75rem;
+          --normal-font-size: 1rem;
+          --small-font-size: .875rem;
+          --smaller-font-size: .813rem;
+        }
+      }
+
+
+
+
+      .navbar-nav.nav-link {
+        color: #fff!important;
+      }
+      
+      .welcome-text {
+        color: #fff;
+      }
+
+      body {
+        background-color: var(--body-color);
+        font-family: var(--body-font);
+        color: var(--text-color);
+        background-image: url('https://res.cloudinary.com/dbtkas8kr/image/upload/v1716962731/3d-vertical-background-with-abstract-style_ygrqqb.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+      }
+      
+      .navbar {
+        background: linear-gradient(to right, #00719C, #00719C)!important;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        margin-bottom: 50px;
+      }
+      .card-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+      
+      .card {
+        background-color: #e2d4f7;
+        padding: 20px;
+        border-radius: 10px;
+        width: 80vh;
+
+        background: rgba(230, 213, 213, 0.45);
+        border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(9.4px);
+        -webkit-backdrop-filter: blur(9.4px);
+        border: 2px solid rgba(230, 213, 213, 0.96);
+      }
+      
+      .welcome-text {
+        color: var(--title-color);
+        font-size: var(--small-font-size);
+        font-weight: var(--font-semi-bold);
+        margin-bottom: 0.25rem;
+      }
+      .wave {
+        font-size: 36px;
+        color: #fff;
+        margin-left: 5px;
+      }
+      .card h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+      }
+      .card-body {
+        padding: 20px;
+      }
+      
+      .card-title {
+        color: var(--title-color);
+        font-size: var(--h2-font-size);
+        margin-bottom: 0.5rem;
+      }
+      
+      .card-text {
+        color: var(--title-color);
+        font-size: var(--small-font-size);
+        font-weight: var(--font-semi-bold);
+        margin-bottom: 2rem;
+      }
+      
+      .card a {
+        display: inline-block;
+        padding: 10px 20px;
+        background: linear-gradient(to right, #00719C, #00719C)!important;
+        border:none;
+        color: #fff;
+        border-radius: 5px;
+        text-decoration: none;
+      }
+      
+      .card a:hover {
+        background-color: #0056b3;
+      }
+
+      .navbar-toggler{
+        &:focus {
+          outline: none;
+        }
+      }
+
+
+    </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-light">
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="bi bi-list-nested"></i>
+    </button>
+    <h1 style="font-family: optima; color:#ffffff; font-size:25px;">SPORTAL</h1>
+    
+    <a class="nav-link p-2 ml-auto" href="/profile">
+      <i class="fas fa-user-circle fa-lg" style="color: white;"></i>
+    </a>
+    
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-link active" href="/adminhome">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/adminmarks">Marks</a>
+            <a class="nav-link" href="/adminattendance">Attendance</a>
+            <a class="nav-link" href="/adminfees">Fees</a>
+            <a class="nav-link" href="/logout">Logout</a>
+        </div>
+    </div>
+  </nav>
+
+      <div class="card-container">
+        <div class="card">
+          <h1 class="welcome-text">Hello <%= lastname %><span class="wave">🤷‍♂️</span></h1>
+          <p class="welcome-text">We're glad to have you here!</p>
+        </div>
+      </div>
+      <div class="card-container">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">My Courses</h5>
+            <p class="card-text">View and manage your courses here.</p>
+            <a href="/course" class="btn btn-primary">Go to Courses</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-container">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">My Grades</h5>
+            <p class="card-text">View and track your grades here.</p>
+            <a href="/marks" class="btn btn-primary">Go to Grades</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-container">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">My Attendance</h5>
+            <p class="card-text">View and track your attendance here.</p>
+            <a href="/attendance" class="btn btn-primary">Go to Attendance</a>
+          </div>
+          
+        </div>
+      </div>
+</body>
+</html>
