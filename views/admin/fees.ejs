@@ -233,35 +233,35 @@ form {
 
   <div class="container">
     <h1 style="color: #fff; text-align:center;">All Students Details</h1>
+    <form id="marks-form" action="/adminfees" method="POST">
+        <div class="form-group">
+            <label style="color: #fff;" for="semester">Choose Semester:</label>
+            <select id="semester" name="semester" class="form-control">
+                <option value="0">Tution</option>
+                <option value="1">Transport</option>
+                <option value="2">Hostel</option>
+            </select>
+        </div>
+        <button type="submit" class="btn1 text-center">Submit</button>
+    </form>
     <div class="table-responsive" style="padding: 20px;">
     <table id="students-table" class="table table-bordered table-shadow">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Sem</th>
-                <th>Subject 1</th>
-                <th>Subject 2</th>
-                <th>Subject 3</th>
-                <th>Subject 4</th>
-                <th>Subject 5</th>
-                <th>Subject 6</th>
-                <th>SGPA</th>
-                <th>CGPA</th>
+                <th>Year</th>
+                <th>Paid</th>
+                <th>Due</th>
+                
             </tr>
         </thead>
         <tbody>
             <% students.forEach(student => { %>
                 <tr>
                     <td><%= student.id %></td>
-                    <td><%= student.sem %></td>
-                    <td><%= student.sub1 %></td>
-                    <td><%= student.sub2 %></td>
-                    <td><%= student.sub3 %></td>
-                    <td><%= student.sub4 %></td>
-                    <td><%= student.sub5 %></td>
-                    <td><%= student.sub6 %></td>
-                    <td><%= student.sgpa %></td>
-                    <td><%= student.cgpa %></td>
+                    <td><%= student.year %></td>
+                    <td><%= student.paid %></td>
+                    <td><%= student.due %></td>
                 </tr>
             <% }) %>
         </tbody>

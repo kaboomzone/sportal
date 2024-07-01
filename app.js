@@ -514,3 +514,43 @@ app.post('/upload-excel', upload.single('excelFile'), (req, res) => {
   
     res.send('Excel file uploaded and data inserted into the database');
   });
+
+
+  app.get('/adminattendance', isAuthenticated, (req, res) => {
+    const query = 'SELECT * FROM attendance';
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            console.error(err.message);
+            res.send('Error retrieving student data');
+        } else {
+            res.render('admin/attendance', { students: rows });
+        }
+    });
+
+});
+
+app.get('/adminfees', isAuthenticated, (req, res) => {
+    const query = 'SELECT * FROM tution';
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            console.error(err.message);
+            res.send('Error retrieving student data');
+        } else {
+            res.render('admin/fees', { students: rows });
+        }
+    });
+});
+
+app.post('/adminfees', isAuthenticated, async (req, res) => {
+    const feetype = ["tution", "transport","hostel"];
+    const semester = req.body.semester;
+    const query = 'SELECT * FROM '+feetype[semester];
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            console.error(err.message);
+            res.send('Error retrieving student data');
+        } else {
+            res.render('admin/fees', { students: rows });
+        }
+    });
+});
