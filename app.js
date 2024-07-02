@@ -474,6 +474,32 @@ app.listen(PORT, () => {
 
 //admin
 
+const getAdminProfile = (username) => {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM adminprofile WHERE id = ?`;
+        db.get(query, [username], (err, row) => {
+            if (err) {
+                reject(err);
+            } else {
+                const profile = {
+                    name: row.name,
+                    email: row.email,
+                    phone: row.number,
+                    branch: row.branch,
+                    section: row.section,
+                    dob: row.dob,
+                    gender: row.gender,
+                    username: row.id,
+                    link: row.link
+                }
+                resolve(profile);
+            }
+        });
+    });
+};
+
+
+
 app.get('/adminmarks', isAuthenticated, (req, res) => {
     const query = `SELECT * FROM marks`;
     db.all(query, [], (err, rows) => {
@@ -552,5 +578,63 @@ app.post('/adminfees', isAuthenticated, async (req, res) => {
         } else {
             res.render('admin/fees', { students: rows });
         }
+    });
+});
+
+app.post('/adminchangepassword', isAuthenticated, async (req, res) => {
+    const username = req.session.username;
+    const currentPassword = req.body.currentPassword;
+    const newPassword = req.body.newPassword;
+    const confirmPassword = req.body.confirmPassword;
+
+    if(username === undefined){
+        res.redirect('/');
+    }
+    const results = await getProfile(username);
+
+
+    try {
+        const query = `Select * from admin where USERNAME = ? and  PASSWORD = ?`;
+        const result = await db.get(query, [username, currentPassword]);
+        if (result.length == 0) {
+            res.render('profile', {
+                results: results,
+                message: 'Current password is incorrect'
+                });
+                } 
+        else {
+            const query = `UPDATE admin SET PASSWORD = ? WHERE USERNAME = ?`;
+            const result = await db.run(query, [newPassword, username]);
+            res.render('profile', {
+                results: results,
+                message: 'Password changed successfully'
+                });
+            }
+    } catch (err) {
+        console.error('Error fetching course videos:', err.message);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/adminlogout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error logging out:', err);
+            res.status(500).send('Error logging out.');
+        } else {
+            res.redirect('/admin');
+        }
+    });
+});
+
+app.get('/adminprofile', isAuthenticated, async (req, res) => {
+    const username = req.session.username;
+    if(username === undefined){
+        res.redirect('/');
+    }
+    const result = await getAdminProfile(username);
+    res.render('profile',{
+        results: result,
+        message: ""
     });
 });
