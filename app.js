@@ -486,7 +486,6 @@ const getAdminProfile = (username) => {
                     email: row.email,
                     phone: row.number,
                     branch: row.branch,
-                    section: row.section,
                     dob: row.dob,
                     gender: row.gender,
                     username: row.id,
@@ -633,7 +632,7 @@ app.get('/adminprofile', isAuthenticated, async (req, res) => {
         res.redirect('/');
     }
     const result = await getAdminProfile(username);
-    res.render('profile',{
+    res.render('admin/profile',{
         results: result,
         message: ""
     });
