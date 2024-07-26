@@ -7,8 +7,11 @@ const multer = require('multer');
 const csvParser = require('csv-parser');
 const xlsx = require('xlsx');
 const fs = require('fs');
+const { constrainedMemory } = require('process');
 const app = express();
 const PORT = 3000;
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
@@ -218,50 +221,16 @@ app.post('/login', (req, res) => {
 
     
         req.session.username = username;
+        req.session.sem = row.sem;
         res.redirect('/home');
     });
 });
 
-app.post('/adminlogin', (req, res)=>{
-    const { username, password } = req.body;
-    const query = `SELECT * FROM admin WHERE username = ?`;
-
-    db.get(query, [username], (err, row) => {
-        if (err) {
-            console.error('Error executing query:', err.message);
-            res.status(500).send('Internal Server Error');
-            return;
-        }
-
-        if (!row || row.PASSWORD !== password) {
-            res.render('login', { errorMessage: 'Invalid username or password' });
-            return;
-        }
-
-    
-        req.session.username = username;
-        res.redirect('/adminhome');
-    });
-
-});
-
-app.get('/adminhome', isAuthenticated, (req, res) => {
-    const query = `SELECT * FROM admin WHERE username = ?`;
-    const username = req.session.username;
-    db.get(query, [username], (err, row) => {
-        if (err) {
-            console.error('Error executing query:', err.message);
-            res.status(500).send('Internal Server Error');
-            return;
-        }
-        let lastname = row.LASTNAME;
-        res.render('admin/home', { lastname });
-    });
-});
 
 app.get('/home', isAuthenticated, (req, res) => {
     const query = `SELECT * FROM user WHERE username = ?`;
     const username = req.session.username;
+    const sem = req.session.sem;
     db.get(query, [username], (err, row) => {
         if (err) {
             console.error('Error executing query:', err.message);
@@ -269,7 +238,7 @@ app.get('/home', isAuthenticated, (req, res) => {
             return;
         }
         let lastname = row.LASTNAME;
-        res.render('home', { lastname });
+        res.render('home', { lastname, sem});
     });
 });
 
@@ -497,6 +466,43 @@ const getAdminProfile = (username) => {
     });
 };
 
+
+app.post('/adminlogin', (req, res)=>{
+    const { username, password } = req.body;
+    const query = `SELECT * FROM admin WHERE username = ?`;
+
+    db.get(query, [username], (err, row) => {
+        if (err) {
+            console.error('Error executing query:', err.message);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        if (!row || row.PASSWORD !== password) {
+            res.render('login', { errorMessage: 'Invalid username or password' });
+            return;
+        }
+
+    
+        req.session.username = username;
+        res.redirect('/adminhome');
+    });
+
+});
+
+app.get('/adminhome', isAuthenticated, (req, res) => {
+    const query = `SELECT * FROM admin WHERE username = ?`;
+    const username = req.session.username;
+    db.get(query, [username], (err, row) => {
+        if (err) {
+            console.error('Error executing query:', err.message);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        let lastname = row.LASTNAME;
+        res.render('admin/home', { lastname });
+    });
+});
 
 
 app.get('/adminmarks', isAuthenticated, (req, res) => {

@@ -20,7 +20,7 @@
   --second-color: hsl(249, 64%, 47%);
   --title-color: hsl(244, 12%, 12%);
   --text-color: hsl(244, 4%, 36%);
-  --body-color: hsl(208, 97%, 85%);
+  --body-color: hsla(0, 0%, 100%, 0.541);
   /*========== Font and typography ==========*/
   /*.5rem = 8px | 1rem = 16px ...*/
   --body-font: "Poppins", sans-serif;
@@ -83,13 +83,15 @@ img {
 }
 .login__form {
   position: relative;
-  background-color: hsla(244, 16%, 92%, 0.2);
-  border: 2px solid hsla(244, 16%, 92%, 0.75);
+  background-color: hsl(0, 0%, 100%);
+  border: 2px solid hsl(249, 17%, 92%);
   margin-inline: 1.5rem;
   row-gap: 1.25rem;
-  backdrop-filter: blur(20px);
   padding: 2rem;
-  border-radius: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(9.4px);
+        -webkit-backdrop-filter: blur(9.4px);
 }
 .login__title {
   color: var(--title-color);
@@ -190,7 +192,7 @@ img {
   cursor: pointer;
 }
 .login__button-ghost {
-  background: hsla(244, 16%, 92%, 0.6);
+  background: hsla(0, 0%, 100%, 0.6);
   border: 2px solid var(--first-color);
   color: var(--first-color);
   box-shadow: none;
@@ -276,7 +278,7 @@ img {
     <body>
         <div class="container">
             <div class="login__content">
-                <img src="https://res.cloudinary.com/dbtkas8kr/image/upload/v1716962731/3d-vertical-background-with-abstract-style_ygrqqb.jpg" alt="login image" class="login__img">
+
 
                 <form action="/login" method="POST" class="login__form">
                     <div>

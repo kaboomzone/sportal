@@ -56,7 +56,9 @@
         background-color: var(--body-color);
         font-family: var(--body-font);
         color: var(--text-color);
-        background-image: url('https://res.cloudinary.com/dbtkas8kr/image/upload/v1716962731/3d-vertical-background-with-abstract-style_ygrqqb.jpg');
+      /*  background-image: url('https://res.cloudinary.com/dbtkas8kr/image/upload/v1716962731/3d-vertical-background-with-abstract-style_ygrqqb.jpg');
+       */
+        background-color: white;
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center center;
@@ -77,15 +79,14 @@
       .card {
         background-color: #e2d4f7;
         padding: 20px;
-        border-radius: 10px;
+        border-radius: 5px;
         width: 80vh;
 
-        background: rgba(230, 213, 213, 0.45);
-        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.45);
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         backdrop-filter: blur(9.4px);
         -webkit-backdrop-filter: blur(9.4px);
-        border: 2px solid rgba(230, 213, 213, 0.96);
+        border: 2px solid rgba(255, 255, 255, 0.96);
       }
       
       .welcome-text {
@@ -171,9 +172,12 @@
         height: 200px;
         width: 200px;
         border-radius: 50%;
+        border: 1px solid black;
         background-size: cover;
         background-position: center;
         margin-bottom: 20px;
+        backdrop-filter: blur(9.4px);
+        -webkit-backdrop-filter: blur(9.4px);
       }
       .profile-pic-container {
         display: flex;
@@ -181,6 +185,7 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 20px;
+        
       }
       .content {
         padding: 20px;
@@ -238,18 +243,18 @@
             <a class="nav-link" href="/marks">Marks</a>
             <a class="nav-link" href="/attendance">Attendance</a>
             <a class="nav-link" href="/fees">Fees</a>
-            <a class="nav-link" href="/course">Courses</a>
+            
             <a class="nav-link" href="/about">About</a>
             <a class="nav-link" href="/logout">Logout</a>
           </div>
         </div>
       </nav>
-  <p style="color:#93c950; text-align:center; margin-top:20px;"><%= message %></p>
-  <div class="profile-pic-container" style="margin-top: 90px;">
-    <div class="profile-pic"></div> 
-    </div>
+  <p style="color:#93c950; text-align:center; margin-top:90px;"><%= message %></p>
     <div class="card-container">
     <div class="card">
+      <div class="profile-pic-container">
+        <div class="profile-pic"></div> 
+        </div>
     <div class="content">
         <label for="user-id">User ID</label>
         <p id="user-id"><%= results.username %></p>
