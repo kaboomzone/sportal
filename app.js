@@ -192,7 +192,7 @@ const getProfile = (username) => {
     });
 };
 
-
+ 
 
 app.get('/', (req, res) => {
     res.render('login', { errorMessage: '' });
@@ -330,7 +330,7 @@ app.post('/fees', isAuthenticated, async (req, res) => {
 });
 
 
-app.get('/course', (req, res) => {
+/* app.get('/course', (req, res) => {
     res.render('course',{
         coursevideos: [],
         currentsemester: 0,
@@ -376,6 +376,8 @@ app.get('/coursevideos', isAuthenticated, async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+*/
 
 
 app.get('/profile', isAuthenticated, async (req, res) => {
