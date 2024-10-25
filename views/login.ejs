@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content="hsl(244, 75%, 57%)">
 
         <!--=============== REMIXICONS ===============-->
         <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -322,10 +323,25 @@ img {
                 </form>
             </div>
         </div>
+        <button id="installButton" style="display: none;">Install App</button>
+
 
 
         <!--=============== MAIN JS ===============-->
         <script>
+
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+            .then(registration => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+                console.log('Service Worker registration failed:', error);
+            });
+        }
+        
+
+
           /*=============== SHOW HIDDEN - PASSWORD ===============*/
 const showHiddenPass = (inputPass, inputIcon) =>{
    const input = document.getElementById(inputPass),
