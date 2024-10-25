@@ -5,8 +5,8 @@ self.addEventListener('install', (event) => {
                 '/',
                 '/styles.css',
                 '/script.js',
-                '/images/icon-192.png',
-                '/images/icon-512.png'
+                '/images/icon.jpg',
+                '/images/icon.jpg'
                 // Add more files to cache if necessary
             ]);
         })
