@@ -192,6 +192,21 @@ const getProfile = (username) => {
     });
 };
 
+const getEvents = (username) => {
+    return new Promise((resolve, reject) => {
+        // Connect to the database (you can replace `database.db` with your DB file)
+
+        const query = `SELECT id, title, description, registerlink, photolink FROM events`;
+
+        db.all(query, (error, rows) => {
+            if (error) {
+                reject(error); // If there's an error, reject the promise
+            } else {
+                resolve(rows); // Otherwise, resolve the promise with the retrieved rows
+            }
+        });
+    });
+};
  
 
 app.get('/', (req, res) => {
@@ -222,6 +237,7 @@ app.post('/login', (req, res) => {
     
         req.session.username = username;
         req.session.sem = row.sem;
+        req.session.branch = row.branch;
         res.redirect('/home');
     });
 });
@@ -378,6 +394,18 @@ app.get('/coursevideos', isAuthenticated, async (req, res) => {
 });
 
 */
+
+app.get('/events', async (req, res) => {
+    const username = req.query.username || 'defaultUser'; // Replace or adjust to get the username
+
+    try {
+        const events = await getEvents(username); // Get events data for the user
+        res.render('events', { events }); // Pass events data to EJS template
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        res.status(500).send("Error fetching events");
+    }
+});
 
 
 app.get('/profile', isAuthenticated, async (req, res) => {

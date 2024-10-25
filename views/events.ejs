@@ -25,9 +25,9 @@
     
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link active" href="/home">Home <span class="sr-only">(current)</span></a>
         <a class="nav-link" href="/marks">Marks</a>
-        <a class="nav-link active" href="/attendance">Attendance</a>
+        <a class="nav-link" href="/attendance">Attendance</a>
         <a class="nav-link" href="/fees">Fees</a>
         
         <a class="nav-link" href="/events">About</a>
@@ -35,38 +35,20 @@
       </div>
     </div>
   </nav>
-
-      
-
-      <div class="container">
-        <div class="card-container">
-            <div class="card" style="text-align: center;">
-              <h1 class="welcome-text">Your Attendance</h1>
-              <p class="welcome-text" style="font-size: 70px;"><%= totalpercentage %></p>
+  <div class="card-container">
+    <% if (events.length > 0) { %>
+        <% events.forEach(event => { %>
+            <div class="card">
+                <h2><%= event.title %></h2>
+                <p><%= event.description %></p>
+                <p>Event ID: <%= event.id %></p>
+                <a href="<%= event.registerlink %>">Register Here</a>
             </div>
-          </div>
-          <div style="border-bottom: solid #000000 3px ; margin-left:100px; margin-right:100px; margin-top:30px; margin-bottom:30px;"></div>
-        <h1 style="text-align:center;">Subject Attendance</h1>
-        <table id="attendance-table" class="table table-bordered table-shadow">
-          <thead>
-            <tr>
-              <th>Subject</th>
-              <th>Percentage</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% for (let sub of subs) { %>
-              <tr>
-                <td><%= sub.subject %></td>
-                <td><%= sub.percentage %></td>
-              </tr>
-            <% } %>
-          </tbody>
-          <tfoot>
-          </tfoot>
-        </table>
-      </div>
+        <% }) %>
+    <% } else { %>
+        <p>No events found for this user.</p>
+    <% } %>
+  </div>
 
-      
 </body>
 </html>
