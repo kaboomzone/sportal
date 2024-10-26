@@ -28,7 +28,7 @@
         <a class="nav-link active" href="/marks">Marks</a>
         <a class="nav-link" href="/attendance">Attendance</a>
         <a class="nav-link" href="/fees">Fees</a>
-        <a class="nav-link" href="/events">About</a>
+        <a class="nav-link" href="/events">Events</a>
         <a class="nav-link" href="/logout">Logout</a>
       </div>
     </div>
@@ -40,7 +40,7 @@
         <div class="card-container">
             <div class="card" style="text-align: center;">
               <h1 class="welcome-text">Your CGPA</h1>
-              <p class="welcome-text" style="font-size: 70px;"><%= cgpa %></p>
+              <p class="welcome-text" style="font-size: 70px;" id="cgpaText"><%= cgpa %></p>
             </div>
           </div>
           <div style="border-bottom: solid #000000 3px ; margin-left:100px; margin-right:100px; margin-top:30px; margin-bottom:30px;"></div>
@@ -90,6 +90,48 @@
         </table>
       </div>
 
+      <!-- Place this script at the end of your body section -->
+<script>
+  document.getElementById("marks-form").addEventListener("submit", async function(event) {
+      event.preventDefault(); // Prevent form from submitting traditionally
+  
       
+      try {
+        const semester = document.getElementById("semester").value;
+        console.log(semester);
+          const response = await fetch("/marks", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ semester })
+          });
+  
+          if (!response.ok) {
+              throw new Error("Failed to fetch marks data.");
+          }
+  
+          const data = await response.json();
+  
+          // Update the CGPA and SGPA
+          document.getElementById("cgpaText").textContent = data.cgpa;
+          document.getElementById("sgpa").textContent = data.sgpa;
+  
+          // Clear existing table rows
+          const marksTableBody = document.querySelector("#marks-table tbody");
+          marksTableBody.innerHTML = "";
+  
+          // Populate table with new data
+          data.marks.forEach(mark => {
+              const row = document.createElement("tr");
+              row.innerHTML = `<td>${mark.subject}</td><td>${mark.marks}</td>`;
+              marksTableBody.appendChild(row);
+          });
+      } catch (error) {
+          console.error("Error fetching marks:", error.message);
+      }
+  });
+  </script>
+  
 </body>
 </html>

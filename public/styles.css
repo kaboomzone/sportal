@@ -136,6 +136,15 @@
         background-color: #0056b3;
       }
 
+      .sub-card{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .event-image{
+        height: 100px;
+      }
       
       .table-shadow {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.514);

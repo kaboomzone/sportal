@@ -12,7 +12,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -79,34 +79,46 @@ const getAttendance = (username) => {
 const getFees = (val, val2, username) => {
     const feetype = ["tution", "hostel", "transport"];
     return new Promise((resolve, reject) => {
-        const query = `SELECT * FROM ${feetype[val]} WHERE id = ? and year = ?`;
-        db.all(query, [username,val2], (err, rows) => {
+        const query = `SELECT * FROM ${feetype[val]} WHERE id = ? AND year = ?`;
+        db.all(query, [username, val2], (err, rows) => {
             if (err) {
                 reject(err);
             } else {
+                let feesdetails;
+                let dueMessage = null; // Initialize message variable
+
                 if (rows.length === 0) {
-                    const feesdetails = rows.map(row => ({
+                    feesdetails = [{
                         year: 0,
                         feespaid: 0,
                         feesdue: 0
-                    }));
-                    resolve({
-                        feesdetails
-                    });
+                    }];
+                    dueMessage = `You have NO RECORDS in ${feetype[val]}`;
+                    resolve({ feesdetails, dueMessage });
                 } else {
-                    const feesdetails = rows.map(row => ({
-                        year: row.year,
-                        feespaid: row.paid,
-                        feesdue: row.due
-                    }));
-                    resolve({
-                        feesdetails
+                    feesdetails = rows.map(row => {
+                        return {
+                            year: row.year,
+                            feespaid: row.paid,
+                            feesdue: row.due
+                        };
                     });
+
+                    // Check if there are any dues
+                    const hasDue = feesdetails.some(fee => fee.feesdue > 0);
+                    if (hasDue) {
+                        dueMessage = "You have dues, contact the Admin office.";
+                    } else {
+                        dueMessage = "No dues.";
+                    }
+
+                    resolve({ feesdetails, dueMessage });
                 }
             }
         });
     });
 };
+
 
 
 const getMarksBySemester = (semester, username) => {
@@ -276,19 +288,21 @@ app.get('/marks', isAuthenticated, async (req, res) => {
 
 app.post('/marks', isAuthenticated, async (req, res) => {
     const semester = req.body.semester;
+    console.log(semester);
     const username = req.session.username;
     try {
         const result = await getMarksBySemester(semester, username);
-        res.render('marks', {
+        res.json({
             marks: result.marks,
             sgpa: result.sgpa,
             cgpa: result.cgpa
         });
     } catch (err) {
         console.error('Error fetching marks:', err.message);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 
 app.get('/attendance', isAuthenticated, async (req, res) => {
@@ -329,14 +343,14 @@ app.post('/fees', isAuthenticated, async (req, res) => {
     try {
         const result = await getFees(semester, year, username)
         if (result.feesdetails.length === 0) {
-            res.render('fees', {
+            res.json({
                 feesdetails: result.feesdetails,
                 errormsg: errorMsg
             });
         } else {
-            res.render('fees', {
+            res.json({
                 feesdetails: result.feesdetails,
-                errormsg: null
+                errormsg: result.dueMessage
             });
         }
     } catch (err) {

@@ -330,17 +330,6 @@ img {
         <!--=============== MAIN JS ===============-->
         <script>
 
-          if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
-                console.log('Service Worker registered with scope:', registration.scope);
-            })
-            .catch(error => {
-                console.log('Service Worker registration failed:', error);
-            });
-        }
-        
-
 
           /*=============== SHOW HIDDEN - PASSWORD ===============*/
 const showHiddenPass = (inputPass, inputIcon) =>{
@@ -370,31 +359,6 @@ const showHiddenPass = (inputPass, inputIcon) =>{
 }
 
 showHiddenPass('password','input-icon');
-
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the mini-infobar from appearing on mobile
-    e.preventDefault();
-    // Stash the event so it can be triggered later
-    deferredPrompt = e;
-    // Show your custom install button here
-
-    // Example: Add an install button click event
-    const installButton = document.getElementById('installButton');
-    installButton.style.display = 'block'; // Make the button visible
-
-    installButton.addEventListener('click', async () => {
-        // Show the install prompt
-        deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`User response to the install prompt: ${outcome}`);
-        // Clear the deferred prompt variable
-        deferredPrompt = null;
-    });
-});
-
         </script>
     </body>
 </html>
