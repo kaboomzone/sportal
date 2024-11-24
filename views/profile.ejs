@@ -216,39 +216,17 @@
     .logout-button{
         width: 100%;
         padding: 15px;
-        background-color: #00719C;
+        background-color: #9c0022;
         border: none;
         border-radius: 5px;
         color: white;
         font-size: 16px;
         cursor: pointer;
         text-align: center;
-        margin-top: 10px;
     }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-light fixed-top">
-      <button class="navbar-toggler border-0 shadow-none" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="bi bi-list-nested"></i>
-      </button>
-      <h1 style="font-family: optima; color:#ffffff; font-size:25px;">SPORTAL</h1>
-        <a class="nav-link p-2 ml-auto" href="/profile">
-          <i class="fas fa-user-circle fa-lg" style="color: white;"></i>
-        </a>
-        
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-link active" href="/home">Home <span class="sr-only">(current)</span></a>
-            <a class="nav-link" href="/marks">Marks</a>
-            <a class="nav-link" href="/attendance">Attendance</a>
-            <a class="nav-link" href="/fees">Fees</a>
-            
-            <a class="nav-link" href="/events">Events</a>
-            <a class="nav-link" href="/logout">Logout</a>
-          </div>
-        </div>
-      </nav>
   <p style="color:#93c950; text-align:center; margin-top:90px;"><%= message %></p>
     <div class="card-container">
     <div class="card">
@@ -281,7 +259,7 @@
         <p id="gender"><%= results.gender %></p>
         
         <a href="#" data-toggle="modal" data-target="#changePasswordModal"><button class="update-button">Change Password</button></a>
-        <a href="/logout"><button class="logout-button">Log Out</button></a>
+        <a href="/logout"><button class="update-button">Log Out</button></a>
         
     </div>
     </div>
@@ -319,6 +297,9 @@
           </div>
         </div>
       </div>
+
+      
+
       <script>
         const newPassword = document.getElementById('newPassword');
         const confirmPassword = document.getElementById('confirmPassword');

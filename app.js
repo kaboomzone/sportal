@@ -206,8 +206,6 @@ const getProfile = (username) => {
 
 const getEvents = (username) => {
     return new Promise((resolve, reject) => {
-        // Connect to the database (you can replace `database.db` with your DB file)
-
         const query = `SELECT id, title, description, registerlink, photolink FROM events`;
 
         db.all(query, (error, rows) => {
@@ -250,7 +248,7 @@ app.post('/login', (req, res) => {
         req.session.username = username;
         req.session.sem = row.sem;
         req.session.branch = row.branch;
-        res.redirect('/home');
+        res.redirect('/course');
     });
 });
 
@@ -303,12 +301,13 @@ app.post('/marks', isAuthenticated, async (req, res) => {
     }
 });
 
-
+app.get('/course', (req, res) => res.render('course'));
 
 app.get('/attendance', isAuthenticated, async (req, res) => {
     const username = req.session.username;
     try {
         const result = await getAttendance(username);
+        console.log(result);
         res.render('attendance', {
             subs: result.attendance,
             totalpercentage: result.totalpercentage

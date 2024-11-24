@@ -69,7 +69,7 @@
         padding: 20px;
         border-radius: 10px;
         width: 80vh;
-
+        
         background: rgba(230, 213, 213, 0.45);
         border-radius: 16px;
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
@@ -144,6 +144,7 @@
 
       .event-image{
         height: 100px;
+        width: 100px;
       }
       
       .table-shadow {
@@ -250,4 +251,23 @@
 
     .content-container{
       display: flex;
+    }
+
+    .nav-pills .nav-link.active {
+      background-color: #00719C!important;
+      color: white!important;
+    }
+    .nav-pills .nav-link{
+      color: #00719C!important;
+    }
+    
+    .footer-container{
+      background-color: #00719C;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+    .footer-style button{
+      border: none;
+      background-color: transparent;
+      color: white;
     }
