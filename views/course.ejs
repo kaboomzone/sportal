@@ -169,6 +169,48 @@
   
         chart.draw(data, options);
       }
+
+
+      document.addEventListener('DOMContentLoaded', (event) => {
+        const feesForm = document.getElementById("fees-form");
+        const submitBtn = document.getElementById("submitBtn");
+    
+        feesForm.addEventListener("submit", async function(event) {
+            event.preventDefault(); // Prevent default form submission
+            
+            const feestype = document.getElementById("feestype").value;
+            const year = document.getElementById("year").value;
+    
+            try {
+                const response = await fetch("/fees", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ feestype, year })
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+    
+                const result = await response.json();
+                updateFeesTable(result);
+            } catch (error) {
+                console.error("Error fetching fees:", error);
+            }
+        });
+    
+        function updateFeesTable(result) {
+            console.log(result);
+            const messageContainer = document.getElementById('errorMsg');
+            messageContainer.textContent = result.errormsg;
+        }
+    });
+
+
+
+
       loadContent('/home');
     
     </script>
