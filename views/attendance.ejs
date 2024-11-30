@@ -67,7 +67,7 @@
     </table>
   </div>
 
-  <button class="btn btn-primary" data-toggle="modal" data-target="#chartModal">
+  <button class="btn btn-primary" data-toggle="modal" data-target="#chartModal" onclick="showChart()">
     View Attendance Chart
   </button>
 
@@ -93,17 +93,16 @@
  
 
 <script>
-  // Chart Initialization
   $('#chartModal').on('shown.bs.modal', function () {
     const ctx = document.getElementById('popupChart').getContext('2d');
-
+    console.log("hii")
     new Chart(ctx, {
-      type: 'line', // Change chart type as needed
+      type: 'line', 
       data: {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], // X-axis labels
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
         datasets: [{
           label: 'Attendance',
-          data: [12, 19, 3, 5, 2], // Data points
+          data: [12, 19, 3, 5, 2],
           backgroundColor: [
             'rgba(75, 192, 192, 0.2)',
             'rgba(153, 102, 255, 0.2)',

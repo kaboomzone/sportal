@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="./script.js"></script>
+    <script src="/script.js"></script>
   </head>
   <style>
     footer button.active {
@@ -80,6 +80,34 @@
     </footer>
 
     <script>
+      function showChart(){
+
+
+        const ctx = document.getElementById('popupChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line', // or 'bar', 'pie', etc.
+        data: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            datasets: [{
+                label: 'Attendance',
+                data: [12, 19, 3, 5, 2], 
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+      }
       function loadContent(url) {
         fetch(url)
           .then(response => response.text())
@@ -102,11 +130,9 @@
 
 
       function highlightMenu(activeUrl) {
-        // Remove active class from all buttons
         const menuItems = document.querySelectorAll('footer button');
         menuItems.forEach(item => item.classList.remove('active'));
     
-        // Add active class to the button corresponding to the current page
         if (activeUrl.includes('/home')) {
           document.getElementById('home-btn').classList.add('active');
         } else if (activeUrl.includes('/marks')) {
@@ -138,52 +164,41 @@
   
         var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
         
-        // Hide the skeleton and display the chart once data is ready
         document.getElementById('skeleton-loader').style.display = 'none';
         document.getElementById('donutchart').style.display = 'block';
   
         chart.draw(data, options);
       }
+
+
       $('#chartModal').on('shown.bs.modal', function () {
-        
-        const ctx = document.getElementById('popupChart').getContext('2d');
-        
-        new Chart(ctx, {
-          type: 'line', // Change chart type as needed
-          data: {
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], // X-axis labels
+        console.log("hii");
+    console.log("Modal shown: Initializing Chart.js");
+    const ctx = document.getElementById('popupChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line', // or 'bar', 'pie', etc.
+        data: {
+            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
             datasets: [{
-              label: 'Attendance',
-              data: [12, 19, 3, 5, 2], // Data points
-              backgroundColor: [
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)'
-              ],
-              borderColor: [
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)',
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)'
-                ],
+                label: 'Attendance',
+                data: [12, 19, 3, 5, 2], 
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
             }]
-          },
-          options: {
+        },
+        options: {
             responsive: true,
             scales: {
-              y: {
-                beginAtZero: true
-              }
+                y: {
+                    beginAtZero: true
+                }
             }
-          }
-        });
-      });
-      
-      // Load the default page
+        }
+    });
+});
+
       loadContent('/home');
     
     </script>

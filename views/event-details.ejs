@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= event.title %> - Event Details</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.3/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h2><%= event.eventname %></h2>
+            </div>
+            <div class="card-body">
+                <p><strong>Description:</strong> <%= event.description %></p>
+                <p><strong>Branch:</strong> <%= event.branch %></p>
+                <p><strong>Venue:</strong> <%= event.venue %></p>
+                <p><strong>Date:</strong> <%= event.date %></p>
+                <p><strong>Time:</strong> <%= event.time %></p>
+                <p><strong>Club:</strong> <%= event.club %></p>
+                <div class="mb-3">
+                    <img src="<%= event.logo %>" class="img-fluid" alt="Event Logo">
+                </div>
+                <div class="mb-3">
+                    <img src="<%= event.eventbanner %>" class="img-fluid" alt="Event Banner">
+                </div>
+                <a href="<%= event.registerlink %>" class="btn btn-primary">Register Here</a>
+                <a href="/events" class="btn btn-secondary">Back to Events</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
