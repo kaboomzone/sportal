@@ -4,7 +4,7 @@ $('#chartModal').on('shown.bs.modal', function () {
     new Chart(ctx, {
       type: 'line', // Change chart type as needed
       data: {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], // X-axis labels
+        labels: ['July', 'August', 'September', 'October', 'November'],
         datasets: [{
           label: 'Attendance',
           data: [12, 19, 3, 5, 2], // Data points

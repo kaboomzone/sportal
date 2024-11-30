@@ -431,7 +431,7 @@ app.post('/external-marks', (req, res) => {
 
 
 
-app.get('/course', (req, res) => res.render('course'));
+app.get('/course', isAuthenticated , (req, res) => res.render('course'));
 
 app.get('/attendance', isAuthenticated, async (req, res) => {
     const username = req.session.username;

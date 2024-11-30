@@ -88,8 +88,8 @@
     new Chart(ctx, {
         type: 'line', // or 'bar', 'pie', etc.
         data: {
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            datasets: [{
+          labels: ['July', 'August', 'September', 'October', 'November'],
+          datasets: [{
                 label: 'Attendance',
                 data: [12, 19, 3, 5, 2], 
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -169,36 +169,6 @@
   
         chart.draw(data, options);
       }
-
-
-      $('#chartModal').on('shown.bs.modal', function () {
-        console.log("hii");
-    console.log("Modal shown: Initializing Chart.js");
-    const ctx = document.getElementById('popupChart').getContext('2d');
-
-    new Chart(ctx, {
-        type: 'line', // or 'bar', 'pie', etc.
-        data: {
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            datasets: [{
-                label: 'Attendance',
-                data: [12, 19, 3, 5, 2], 
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-});
-
       loadContent('/home');
     
     </script>
